@@ -11,11 +11,14 @@ jobs:
             name: christmas-tracker-1
 
         steps:
-            - name: "Test SSH"
-              uses: appleboy/ssh-action@v0.1.7
+            - name: Checkout repo
+              uses: actions/checkout@v4
+
+            - name: Copy files to EC2
+              uses: appleboy/scp-action@v0.1.7
               with:
                   host: ${{ secrets.EC2_HOST }}
                   username: ${{ secrets.EC2_USER }}
                   key: ${{ secrets.EC2_PEM }}
-                  script: |
-                      whoami
+                  source: "."
+                  target: /home/admin
