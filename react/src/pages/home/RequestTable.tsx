@@ -1,12 +1,14 @@
 import styled from '@emotion/styled'
 
-import { Checkbox } from "@mui/joy";
+import { Checkbox, IconButton } from "@mui/joy";
 import LaunchIcon from '@mui/icons-material/Launch';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
-import { giftRequests } from '../../utils/dummyData'
+import type { GiftRequest } from '../../services/giftRequestApi';
 
 const COLUMN_WIDTHS = [
-    33, 33, 33
+    25, 30, 15, 15, 15
 ]
 
 const _s = {
@@ -40,34 +42,93 @@ const _s = {
     `
 }
 
-export const RequestTable = () => {
+interface RequestTableProps {
+    requests: GiftRequest[];
+    onTogglePurchased: (id: number) => void;
+    onEdit: (request: GiftRequest) => void;
+    onDelete: (id: number) => void;
+    loading?: boolean;
+}
 
-    const rows = giftRequests.map(rowObject => (
-        <_s.Row>
-            <_s.Cell widthPercentage={COLUMN_WIDTHS[0]}>{rowObject.name}</_s.Cell>
+export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete, loading }: RequestTableProps) => {
+
+    const handleDelete = (id: number, personName: string) => {
+        if (window.confirm(`Are you sure you want to delete the gift request for ${personName}?`)) {
+            onDelete(id);
+        }
+    };
+
+    const rows = requests.map(rowObject => (
+        <_s.Row key={rowObject.id}>
+            <_s.Cell widthPercentage={COLUMN_WIDTHS[0]}>{rowObject.personName}</_s.Cell>
             <_s.Cell widthPercentage={COLUMN_WIDTHS[1]}>
-                <a target='_blank' href={rowObject.link} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    {rowObject.description}
-                    <LaunchIcon sx={{ fontSize: '1rem' }}/>
-                </a>
+                {rowObject.shoppingLink ? (
+                    <a target='_blank' href={rowObject.shoppingLink} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        {rowObject.itemDescription}
+                        <LaunchIcon sx={{ fontSize: '1rem' }}/>
+                    </a>
+                ) : (
+                    rowObject.itemDescription
+                )}
             </_s.Cell>
             <_s.Cell widthPercentage={COLUMN_WIDTHS[2]}>
-                <Checkbox checked={rowObject.purchased}/>
+                <Checkbox
+                    checked={rowObject.purchased}
+                    onChange={() => onTogglePurchased(rowObject.id)}
+                    disabled={loading}
+                />
+            </_s.Cell>
+            <_s.Cell widthPercentage={COLUMN_WIDTHS[3]}>
+                <IconButton
+                    size="sm"
+                    variant="plain"
+                    onClick={() => onEdit(rowObject)}
+                    disabled={loading}
+                >
+                    <EditIcon />
+                </IconButton>
+            </_s.Cell>
+            <_s.Cell widthPercentage={COLUMN_WIDTHS[4]}>
+                <IconButton
+                    size="sm"
+                    variant="plain"
+                    color="danger"
+                    onClick={() => handleDelete(rowObject.id, rowObject.personName)}
+                    disabled={loading}
+                >
+                    <DeleteIcon />
+                </IconButton>
             </_s.Cell>
         </_s.Row>
     ))
 
     return (
-        <_s.Table style={{width: '400px'}}>
+        <_s.Table style={{width: '600px'}}>
             {/* Header */}
             <_s.Row style={{ backgroundColor: '#eaeaea', fontWeight: 600 }}>
                 <_s.Cell widthPercentage={COLUMN_WIDTHS[0]}>Person</_s.Cell>
                 <_s.Cell widthPercentage={COLUMN_WIDTHS[1]}>Item</_s.Cell>
                 <_s.Cell widthPercentage={COLUMN_WIDTHS[2]}>Purchased</_s.Cell>
+                <_s.Cell widthPercentage={COLUMN_WIDTHS[3]}>Edit</_s.Cell>
+                <_s.Cell widthPercentage={COLUMN_WIDTHS[4]}>Delete</_s.Cell>
             </_s.Row>
 
             {/* Contents */}
-            {rows}
+            {loading ? (
+                <_s.Row>
+                    <_s.Cell widthPercentage={100} style={{ justifyContent: 'center', padding: '20px' }}>
+                        Loading...
+                    </_s.Cell>
+                </_s.Row>
+            ) : requests.length === 0 ? (
+                <_s.Row>
+                    <_s.Cell widthPercentage={100} style={{ justifyContent: 'center', padding: '20px' }}>
+                        No gift requests yet. Click "Add" to create one!
+                    </_s.Cell>
+                </_s.Row>
+            ) : (
+                rows
+            )}
         </_s.Table>
     )
 }
