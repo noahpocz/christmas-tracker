@@ -15,4 +15,4 @@ jobs:
               run: |
                   mkdir ~/.ssh
                   echo "${{ secrets.EC2_PEM }}" >> ~/.ssh/ec2.pem
-                  ssh -i "~/.ssh/ec2.pem" admin@ec2-34-228-58-72.compute-1.amazonaws.com "whoami" 
+                  ssh -o "StrictHostKeyChecking no" -i "~/.ssh/ec2.pem" admin@ec2-34-228-58-72.compute-1.amazonaws.com "whoami" 
