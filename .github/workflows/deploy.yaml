@@ -14,6 +14,16 @@ jobs:
             - name: Checkout repo
               uses: actions/checkout@v4
 
+            - name: Prep EC2 instance
+              uses: appleboy/ssh-action@v0.1.7
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_PEM }}
+                  script: |
+                      rm -rf ~/christmas-tracker
+                      mkdir ~/christmas-tracker       
+
             - name: Copy files to EC2
               uses: appleboy/scp-action@v0.1.7
               with:
@@ -21,4 +31,4 @@ jobs:
                   username: ${{ secrets.EC2_USER }}
                   key: ${{ secrets.EC2_PEM }}
                   source: "."
-                  target: /home/admin
+                  target: /home/admin/christmas-tracker
