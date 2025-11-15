@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 
-import { Button } from '@mui/joy'
+import {Box, Button} from '@mui/joy'
 import AddIcon from '@mui/icons-material/Add';
 
 import { RequestTable } from './RequestTable'
@@ -25,6 +25,9 @@ const _s = {
         
         padding: 12px;
         box-sizing: border-box;
+        background-color: white;
+        
+        border-bottom: 1px solid #d9d9d9;
     `
 }
 
@@ -106,11 +109,10 @@ export const HomePage = () => {
             />
             <_s.Container>
                 <_s.Header>
-                    <Button startDecorator={<AddIcon/>} onClick={() => setAddModalOpen(true)}>
-                        Add
-                    </Button>
+                    🎅🏻 Secret Santa
                 </_s.Header>
-                <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+
+                <Box p={2} gap={2} sx={{ width: '100%', display: 'flex', flexDirection: 'column', boxSizing: 'border-box' }}>
                     <RequestTable
                         requests={requests}
                         onTogglePurchased={handleTogglePurchased}
@@ -118,7 +120,11 @@ export const HomePage = () => {
                         onDelete={handleDeleteRequest}
                         loading={loading}
                     />
-                </div>
+                    <Button startDecorator={<AddIcon/>} onClick={() => setAddModalOpen(true)}>
+                        Add Item
+                    </Button>
+                </Box>
+
             </_s.Container>
         </>
     )

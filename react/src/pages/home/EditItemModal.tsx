@@ -62,7 +62,6 @@ export default function EditItemModal({ open, onClose, onSubmit, item }: EditIte
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 500,
           padding: 3,
           borderRadius: 8,
         }}
