@@ -2,7 +2,6 @@ import styled from '@emotion/styled'
 
 import { Checkbox, Box } from "@mui/joy";
 import LaunchIcon from '@mui/icons-material/Launch';
-import CheckIcon from '@mui/icons-material/Check';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 import { TableRow } from './TableRow.tsx'
@@ -59,6 +58,7 @@ export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete, lo
 
     const handleDelete = (id: number, personName: string) => {
         if (window.confirm(`Are you sure you want to delete the gift request for ${personName}?`)) {
+            setSelectedRowIndex(-1);
             onDelete(id);
         }
     };
@@ -101,8 +101,6 @@ export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete, lo
                 <_s.Cell widthPercentage={COLUMN_WIDTHS[2]} style={{ justifyContent: 'center' }}>
                     <ShoppingCartIcon/>
                 </_s.Cell>
-                {/*<_s.Cell widthPercentage={COLUMN_WIDTHS[3]}>Edit</_s.Cell>*/}
-                {/*<_s.Cell widthPercentage={COLUMN_WIDTHS[4]}>Delete</_s.Cell>*/}
             </TableRow>
 
             {/* Contents */}

@@ -33,7 +33,6 @@ const _s = {
         border-style: solid;
         border-color: #d9d9d9;
         border-radius: 0 0 5px 5px;
-        
     `
 }
 
