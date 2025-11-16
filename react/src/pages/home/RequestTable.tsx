@@ -56,23 +56,28 @@ export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete, lo
 
     const [selectedRowIndex, setSelectedRowIndex] = useState<number>(-1);
 
-    const handleDelete = (id: number, personName: string) => {
-        if (window.confirm(`Are you sure you want to delete the gift request for ${personName}?`)) {
+    const handleClick = (rowIndex: number) => {
+        if (rowIndex === selectedRowIndex) {
             setSelectedRowIndex(-1);
-            onDelete(id);
+        } else {
+            setSelectedRowIndex(rowIndex);
         }
-    };
+    }
+
+    const handleDelete = (id: number) => {
+        setSelectedRowIndex(-1);
+        onDelete(id);
+    }
 
     const rows = requests.map((rowObject, i: number) => (
         <TableRow
             key={rowObject.id}
             selected={selectedRowIndex === i}
-            onSelect={() => setSelectedRowIndex(i)}
             onEdit={() => onEdit(rowObject)}
-            onDelete={() => handleDelete(rowObject.id, rowObject.personName)}
+            onDelete={() => handleDelete(rowObject.id)}
         >
-            <_s.Cell widthPercentage={COLUMN_WIDTHS[0]}>{rowObject.personName}</_s.Cell>
-            <_s.Cell widthPercentage={COLUMN_WIDTHS[1]}>
+            <_s.Cell onClick={() => handleClick(i)} widthPercentage={COLUMN_WIDTHS[0]}>{rowObject.personName}</_s.Cell>
+            <_s.Cell onClick={() => handleClick(i)} widthPercentage={COLUMN_WIDTHS[1]}>
                 {rowObject.shoppingLink ? (
                     <a target='_blank' href={rowObject.shoppingLink} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                         <LaunchIcon sx={{ fontSize: '1rem' }}/>
@@ -84,6 +89,7 @@ export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete, lo
             </_s.Cell>
             <_s.Cell widthPercentage={COLUMN_WIDTHS[2]} style={{ justifyContent: 'center' }}>
                 <Checkbox
+                    sx={{ zIndex: 1000 }}
                     checked={rowObject.purchased}
                     onChange={() => onTogglePurchased(rowObject.id)}
                     disabled={loading}

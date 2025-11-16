@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from '@emotion/styled'
 
 import { Box, IconButton } from '@mui/joy'
@@ -9,7 +8,10 @@ import { Collapse } from '../../components/Collapse.tsx'
 
 const _s = {
     OuterContainer: styled(Box)`
-        padding: ${props => props.selected ? '12px 0' : '0'};
+        margin: ${props => props.selected ? '12px 0' : '0'};
+        border-radius: ${props => props.selected ? '5px' : '0'};
+        overflow: hidden;
+        transition: all 0.3s;
     `,
 
     InnerRowContainer: styled(Box)`
@@ -27,28 +29,26 @@ const _s = {
         display: flex;
         flex-direction: row;
         justify-content: end;
-        padding: 6px 0;
-        
-        border-width: 0 1px 1px 1px;
-        border-style: solid;
-        border-color: #d9d9d9;
+        padding: 6px;
+
         border-radius: 0 0 5px 5px;
+        background-color: white;
     `
 }
 
-export const TableRow = ({ children, selected = false, onSelect = () => {}, onEdit, onDelete, ...otherProps }) => {
+export const TableRow = ({ children, selected = false, onEdit, onDelete, ...otherProps }) => {
     return (
-        <_s.OuterContainer onClick={onSelect} selected={selected}>
+        <_s.OuterContainer selected={selected}>
             <_s.InnerRowContainer {...otherProps}>
                 {children}
             </_s.InnerRowContainer>
             <Collapse isOpen={selected}>
-                <_s.ControlBox>
-                    <IconButton size="sm" variant="outlined">
-                        <EditSharpIcon onClick={onEdit} />
+                <_s.ControlBox gap={1}>
+                    <IconButton variant="solid" size="sm" onClick={onEdit}>
+                        <EditSharpIcon />
                     </IconButton>
-                    <IconButton color="danger" size="sm">
-                        <DeleteIcon onClick={onDelete} />
+                    <IconButton variant="solid" color="danger" size="sm" onClick={onDelete}>
+                        <DeleteIcon />
                     </IconButton>
                 </_s.ControlBox>
             </Collapse>

@@ -112,7 +112,7 @@ export const HomePage = () => {
                     🎅🏻 Secret Santa
                 </_s.Header>
 
-                <Box p={2} gap={2} sx={{ width: '100%', display: 'flex', flexDirection: 'column', boxSizing: 'border-box' }}>
+                <Box p={2} gap={2} sx={{ width: '100%', maxWidth: 600, margin: 'auto', display: 'flex', flexDirection: 'column', boxSizing: 'border-box' }}>
                     <RequestTable
                         requests={requests}
                         onTogglePurchased={handleTogglePurchased}
