@@ -1,4 +1,6 @@
 import { CssVarsProvider } from "@mui/joy/styles";
+
+// @ts-ignore
 import "@fontsource/inter"
 
 import {HomePage} from "./pages/home/HomePage.tsx";

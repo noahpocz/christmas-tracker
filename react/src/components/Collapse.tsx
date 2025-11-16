@@ -17,10 +17,12 @@ interface CollapseProps {
 
 export const Collapse = ({ children, isOpen }: CollapseProps) => {
     const [elemHeight, setElemHeight] = useState(0)
-    const containerRef = useRef(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        setElemHeight(containerRef.current.clientHeight)
+        if (containerRef.current) {
+            setElemHeight(containerRef.current.clientHeight)
+        }
     }, [])
 
     return (
