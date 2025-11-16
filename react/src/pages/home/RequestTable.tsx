@@ -103,7 +103,7 @@ export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete }: 
             <TableRow>
                 <_s.Cell widthPercentage={COLUMN_WIDTHS[0]}>Person</_s.Cell>
                 <_s.Cell widthPercentage={COLUMN_WIDTHS[1]}>Item</_s.Cell>
-                <_s.Cell widthPercentage={COLUMN_WIDTHS[2]} style={{ justifyContent: 'center' }}>
+                <_s.Cell widthPercentage={COLUMN_WIDTHS[2]} style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <ShoppingCartIcon/>
                 </_s.Cell>
             </TableRow>
