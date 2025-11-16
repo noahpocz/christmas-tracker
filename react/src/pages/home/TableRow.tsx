@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Collapse } from '../../components/Collapse.tsx'
 
 const _s = {
-    OuterContainer: styled(Box)`
+    OuterContainer: styled(Box)<{selected: boolean}>`
         margin: ${props => props.selected ? '12px 0' : '0'};
         border-radius: ${props => props.selected ? '5px' : '0'};
         overflow: hidden;
@@ -36,10 +36,17 @@ const _s = {
     `
 }
 
-export const TableRow = ({ children, selected = false, onEdit, onDelete, ...otherProps }) => {
+interface TableRowProps {
+    children: React.ReactNode
+    selected?: boolean
+    onEdit?: () => void
+    onDelete?: () => void
+}
+
+export const TableRow = ({ children, selected = false, onEdit, onDelete }: TableRowProps) => {
     return (
         <_s.OuterContainer selected={selected}>
-            <_s.InnerRowContainer {...otherProps}>
+            <_s.InnerRowContainer>
                 {children}
             </_s.InnerRowContainer>
             <Collapse isOpen={selected}>

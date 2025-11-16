@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
 
 const _s = {
-    Container: styled.div`
+    Container: styled.div<{isOpen: boolean, height: number}>`
         height: ${(props) => props.isOpen ? `${props.height}px` : 0};
         transition: height 0.3s;
         
@@ -10,12 +10,17 @@ const _s = {
     `
 }
 
-export const Collapse = ({ children, isOpen }) => {
+interface CollapseProps {
+    children: React.ReactNode
+    isOpen: boolean
+}
+
+export const Collapse = ({ children, isOpen }: CollapseProps) => {
     const [elemHeight, setElemHeight] = useState(0)
     const containerRef = useRef(null);
 
     useEffect(() => {
-        setElemHeight(containerRef.current.clientHeight);
+        setElemHeight(containerRef.current.clientHeight)
     }, [])
 
     return (

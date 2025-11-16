@@ -10,7 +10,7 @@ import type { GiftRequest } from '../../services/giftRequestApi';
 import {useState} from "react";
 
 const COLUMN_WIDTHS = [
-    45, 45, 10
+    30, 60, 10
 ]
 
 const _s = {
@@ -52,7 +52,7 @@ interface RequestTableProps {
     loading?: boolean;
 }
 
-export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete, loading }: RequestTableProps) => {
+export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete }: RequestTableProps) => {
 
     const [selectedRowIndex, setSelectedRowIndex] = useState<number>(-1);
 
@@ -92,7 +92,6 @@ export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete, lo
                     sx={{ zIndex: 1000 }}
                     checked={rowObject.purchased}
                     onChange={() => onTogglePurchased(rowObject.id)}
-                    disabled={loading}
                 />
             </_s.Cell>
         </TableRow>
@@ -101,7 +100,7 @@ export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete, lo
     return (
         <_s.Table>
             {/* Header */}
-            <TableRow style={{ fontWeight: 600 }}>
+            <TableRow>
                 <_s.Cell widthPercentage={COLUMN_WIDTHS[0]}>Person</_s.Cell>
                 <_s.Cell widthPercentage={COLUMN_WIDTHS[1]}>Item</_s.Cell>
                 <_s.Cell widthPercentage={COLUMN_WIDTHS[2]} style={{ justifyContent: 'center' }}>
