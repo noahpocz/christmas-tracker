@@ -31,8 +31,8 @@ jobs:
                   host: ${{ secrets.EC2_HOST }}
                   username: ${{ secrets.EC2_USER }}
                   key: ${{ secrets.EC2_PEM }}
-              script: |
-                  rm -rf ~/christmas-tracker
+                  script: |
+                      rm -rf ~/christmas-tracker
 
             - name: Copy files to EC2
               uses: appleboy/scp-action@v0.1.7
