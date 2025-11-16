@@ -31,5 +31,5 @@ jobs:
                   host: ${{ secrets.EC2_HOST }}
                   username: ${{ secrets.EC2_USER }}
                   key: ${{ secrets.EC2_PEM }}
-                  source: "./react/dist"
+                  source: "./react/dist/*"
                   target: /home/admin/christmas-tracker/react/dist
