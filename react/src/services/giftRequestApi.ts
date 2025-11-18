@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8080/api/gift-requests';
+const API_BASE_URL = 'http://34.228.58.72/api/gift-requests';
 
 export interface GiftRequest {
   id: number;
