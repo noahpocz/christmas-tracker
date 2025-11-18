@@ -1,0 +1,26 @@
+name: Deploy Backend to EC2
+
+on:
+    push:
+        branches: ["main"]
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        environment:
+            name: christmas-tracker-1
+
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+
+            - name: Copy files to EC2
+              uses: appleboy/scp-action@v0.1.7
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_PEM }}
+                  source: "spring-boot/*"
+                  target: spring-boot
+                  rm: true
+                  strip_components: 1
