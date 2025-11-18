@@ -1,4 +1,19 @@
-const API_BASE_URL = 'http://34.228.58.72/api/gift-requests';
+const HOSTNAMES = {
+  DEVELOPMENT: 'localhost',
+  PRODUCTION: '34.228.58.72'
+}
+
+const getApiBaseUrl = () => {
+  const { hostname } = window.location;
+
+  if (hostname === HOSTNAMES.DEVELOPMENT) {
+    return `http://${HOSTNAMES.DEVELOPMENT}:8080/gift-requests`;
+  }
+
+  return `http://${HOSTNAMES.PRODUCTION}/api/gift-requests`;
+}
+
+const API_BASE_URL = getApiBaseUrl();
 
 export interface GiftRequest {
   id: number;
