@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 
-import { Checkbox, Box } from "@mui/joy";
+import {Checkbox, Box, Button} from "@mui/joy";
 import LaunchIcon from '@mui/icons-material/Launch';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
@@ -10,7 +10,7 @@ import type { GiftRequest } from '../../services/giftRequestApi';
 import {useState} from "react";
 
 const COLUMN_WIDTHS = [
-    30, 60, 10
+    8, 25, 55, 12
 ]
 
 const _s = {
@@ -32,6 +32,8 @@ const _s = {
     Cell: styled.div<{widthPercentage: number}>`
         width: ${props => props.widthPercentage}%;
         display: flex;
+        justify-content: start;
+        align-items: center;
         
         padding: 6px;
 
@@ -76,8 +78,11 @@ export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete }: 
             onEdit={() => onEdit(rowObject)}
             onDelete={() => handleDelete(rowObject.id)}
         >
-            <_s.Cell onClick={() => handleClick(i)} widthPercentage={COLUMN_WIDTHS[0]}>{rowObject.personName}</_s.Cell>
-            <_s.Cell onClick={() => handleClick(i)} widthPercentage={COLUMN_WIDTHS[1]}>
+            <_s.Cell widthPercentage={COLUMN_WIDTHS[0]} style={{ justifyContent: 'center' }}>
+                <Checkbox/>
+            </_s.Cell>
+            <_s.Cell onClick={() => handleClick(i)} widthPercentage={COLUMN_WIDTHS[1]}>{rowObject.personName}</_s.Cell>
+            <_s.Cell onClick={() => handleClick(i)} widthPercentage={COLUMN_WIDTHS[2]}>
                 {rowObject.shoppingLink ? (
                     <a target='_blank' href={rowObject.shoppingLink} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                         <LaunchIcon sx={{ fontSize: '1rem' }}/>
@@ -87,12 +92,21 @@ export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete }: 
                     rowObject.itemDescription
                 )}
             </_s.Cell>
-            <_s.Cell widthPercentage={COLUMN_WIDTHS[2]} style={{ justifyContent: 'center' }}>
-                <Checkbox
-                    sx={{ zIndex: 1000 }}
-                    checked={rowObject.purchased}
-                    onChange={() => onTogglePurchased(rowObject.id)}
-                />
+            <_s.Cell widthPercentage={COLUMN_WIDTHS[3]} style={{ justifyContent: 'center' }}>
+                {rowObject.purchased
+                    ? <Button
+                        color="success"
+                        onClick={() => onTogglePurchased(rowObject.id)}
+                        sx={{ fontSize: '12px', padding: '3px 9px', minHeight: 0 }}>
+                        Yes
+                      </Button>
+                    : <Button
+                        color="danger"
+                        onClick={() => onTogglePurchased(rowObject.id)}
+                        sx={{ fontSize: '12px', padding: '3px 9px', minHeight: 0 }}>
+                        No
+                      </Button>
+                }
             </_s.Cell>
         </TableRow>
     ))
@@ -101,9 +115,10 @@ export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete }: 
         <_s.Table>
             {/* Header */}
             <TableRow>
-                <_s.Cell widthPercentage={COLUMN_WIDTHS[0]}>Person</_s.Cell>
-                <_s.Cell widthPercentage={COLUMN_WIDTHS[1]}>Item</_s.Cell>
-                <_s.Cell widthPercentage={COLUMN_WIDTHS[2]} style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <_s.Cell widthPercentage={COLUMN_WIDTHS[0]}/>
+                <_s.Cell widthPercentage={COLUMN_WIDTHS[1]}>Person</_s.Cell>
+                <_s.Cell widthPercentage={COLUMN_WIDTHS[2]}>Item</_s.Cell>
+                <_s.Cell widthPercentage={COLUMN_WIDTHS[3]} style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <ShoppingCartIcon/>
                 </_s.Cell>
             </TableRow>

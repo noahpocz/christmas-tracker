@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 
-import {Box, Button} from '@mui/joy'
+import {Box, Button, IconButton} from '@mui/joy'
 import AddIcon from '@mui/icons-material/Add';
 
 import { RequestTable } from './RequestTable'
@@ -9,6 +9,8 @@ import { AddItemModal } from './AddItemModal'
 import EditItemModal from './EditItemModal'
 import { giftRequestApi } from '../../services/giftRequestApi'
 import type { GiftRequest, CreateGiftRequest } from '../../services/giftRequestApi'
+import EditSharpIcon from "@mui/icons-material/EditSharp";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const _s = {
     Container: styled.div`
@@ -120,9 +122,17 @@ export const HomePage = () => {
                         onDelete={handleDeleteRequest}
                         loading={loading}
                     />
-                    <Button startDecorator={<AddIcon/>} onClick={() => setAddModalOpen(true)}>
-                        Add Item
-                    </Button>
+                    <Box gap={1} sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                        <Button sx={{ flexGrow: 1 }} startDecorator={<AddIcon/>} onClick={() => setAddModalOpen(true)}>
+                            Add Item
+                        </Button>
+                        <IconButton variant="solid" sx={{ backgroundColor: "purple" }}>
+                            <EditSharpIcon />
+                        </IconButton>
+                        <IconButton variant="solid" color="danger">
+                            <DeleteIcon />
+                        </IconButton>
+                    </Box>
                 </Box>
 
             </_s.Container>
