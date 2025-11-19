@@ -7,7 +7,6 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { TableRow } from './TableRow.tsx'
 
 import type { GiftRequest } from '../../services/giftRequestApi';
-import {useState} from "react";
 
 const COLUMN_WIDTHS = [
     8, 25, 55, 12
@@ -48,41 +47,32 @@ const _s = {
 
 interface RequestTableProps {
     requests: GiftRequest[];
+    selectedItemIds: number[];
+    onSelectItem: (id: number) => void;
+    onDeselectItem: (id: number) => void;
     onTogglePurchased: (id: number) => void;
-    onEdit: (request: GiftRequest) => void;
-    onDelete: (id: number) => void;
     loading?: boolean;
 }
 
-export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete }: RequestTableProps) => {
-
-    const [selectedRowIndex, setSelectedRowIndex] = useState<number>(-1);
-
-    const handleClick = (rowIndex: number) => {
-        if (rowIndex === selectedRowIndex) {
-            setSelectedRowIndex(-1);
+export const RequestTable = ({ requests, selectedItemIds, onSelectItem, onDeselectItem, onTogglePurchased }: RequestTableProps) => {
+    const handleSelectionToggle = (id: number) => {
+        if (selectedItemIds.includes(id)) {
+            onDeselectItem(id);
         } else {
-            setSelectedRowIndex(rowIndex);
+            onSelectItem(id);
         }
     }
 
-    const handleDelete = (id: number) => {
-        setSelectedRowIndex(-1);
-        onDelete(id);
-    }
-
-    const rows = requests.map((rowObject, i: number) => (
-        <TableRow
-            key={rowObject.id}
-            selected={selectedRowIndex === i}
-            onEdit={() => onEdit(rowObject)}
-            onDelete={() => handleDelete(rowObject.id)}
-        >
+    const rows = requests.map((rowObject) => (
+        <TableRow key={rowObject.id}>
             <_s.Cell widthPercentage={COLUMN_WIDTHS[0]} style={{ justifyContent: 'center' }}>
-                <Checkbox/>
+                <Checkbox
+                    checked={selectedItemIds.includes(rowObject.id)}
+                    onChange={() => handleSelectionToggle(rowObject.id)}
+                />
             </_s.Cell>
-            <_s.Cell onClick={() => handleClick(i)} widthPercentage={COLUMN_WIDTHS[1]}>{rowObject.personName}</_s.Cell>
-            <_s.Cell onClick={() => handleClick(i)} widthPercentage={COLUMN_WIDTHS[2]}>
+            <_s.Cell widthPercentage={COLUMN_WIDTHS[1]}>{rowObject.personName}</_s.Cell>
+            <_s.Cell widthPercentage={COLUMN_WIDTHS[2]}>
                 {rowObject.shoppingLink ? (
                     <a target='_blank' href={rowObject.shoppingLink} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                         <LaunchIcon sx={{ fontSize: '1rem' }}/>
@@ -98,13 +88,13 @@ export const RequestTable = ({ requests, onTogglePurchased, onEdit, onDelete }: 
                         color="success"
                         onClick={() => onTogglePurchased(rowObject.id)}
                         sx={{ fontSize: '12px', padding: '3px 9px', minHeight: 0 }}>
-                        Yes
+                        {"Yes"}
                       </Button>
                     : <Button
                         color="danger"
                         onClick={() => onTogglePurchased(rowObject.id)}
                         sx={{ fontSize: '12px', padding: '3px 9px', minHeight: 0 }}>
-                        No
+                        {"No"}
                       </Button>
                 }
             </_s.Cell>

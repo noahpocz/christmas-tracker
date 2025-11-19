@@ -1,21 +1,48 @@
 import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 
-import {Box, Button, IconButton} from '@mui/joy'
+import { Box, Button, IconButton } from '@mui/joy'
 import AddIcon from '@mui/icons-material/Add';
+import EditSharpIcon from "@mui/icons-material/EditSharp";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import { RequestTable } from './RequestTable'
 import { AddItemModal } from './AddItemModal'
 import EditItemModal from './EditItemModal'
+
 import { giftRequestApi } from '../../services/giftRequestApi'
 import type { GiftRequest, CreateGiftRequest } from '../../services/giftRequestApi'
-import EditSharpIcon from "@mui/icons-material/EditSharp";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 const _s = {
     Container: styled.div`
         width: 100vw;
         height: 100vh;
+        display: flex;
+        flex-direction: column;
+    `,
+
+    TableContainer: styled(Box)`
+        flex-grow: 1;
+        width: 100%;
+        max-width: 600px;
+        
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        
+        box-sizing: border-box;
+        padding: 12px 12px 72px 12px;
+    `,
+
+    Controls: styled(Box)`
+        position: fixed;
+        bottom: 0;
+        
+        width: 100%;
+        height: 60px;
+        
+        display: flex;
+        justify-content: center;
     `,
 
     Header: styled.div`
@@ -37,6 +64,7 @@ export const HomePage = () => {
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<GiftRequest | null>(null);
+    const [selectedItemIds, setSelectedItemIds] = useState<number[]>([]);
     const [requests, setRequests] = useState<GiftRequest[]>([]);
     const [loading, setLoading] = useState(false);
 
@@ -60,6 +88,7 @@ export const HomePage = () => {
 
     const handleCreateRequest = async (data: CreateGiftRequest) => {
         await giftRequestApi.createRequest(data);
+        setSelectedItemIds([]);
         await fetchRequests();
     };
 
@@ -68,9 +97,13 @@ export const HomePage = () => {
         await fetchRequests();
     };
 
-    const handleDeleteRequest = async (id: number) => {
+    const handleDelete = async () => {
         try {
-            await giftRequestApi.deleteRequest(id);
+            for (let i = 0; i < selectedItemIds.length; i++) {
+                const id = selectedItemIds[i];
+                await giftRequestApi.deleteRequest(id);
+            }
+            setSelectedItemIds([]);
             await fetchRequests();
         } catch (error) {
             console.error('Failed to delete request:', error);
@@ -88,10 +121,24 @@ export const HomePage = () => {
         }
     };
 
-    const handleEdit = (request: GiftRequest) => {
-        setSelectedItem(request);
+    const handleEdit = () => {
+        const id = selectedItemIds[0];
+        const giftRequest = requests.filter((item) => item.id === id)[0];
+        setSelectedItem(giftRequest);
         setEditModalOpen(true);
+        setSelectedItemIds([]);
     };
+
+    const handleSelectItem = (id: number) => {
+        setSelectedItemIds([...selectedItemIds, id]);
+    }
+
+    const handleDeselectItem = (id: number) => {
+        setSelectedItemIds(selectedItemIds.filter(el => el !== id));
+    }
+
+    const editEnabled = selectedItemIds.length === 1;
+    const deleteEnabled = selectedItemIds.length >= 1;
 
     return (
         <>
@@ -113,28 +160,37 @@ export const HomePage = () => {
                 <_s.Header>
                     🎅🏻 Secret Santa
                 </_s.Header>
-
-                <Box p={2} gap={2} sx={{ width: '100%', maxWidth: 600, margin: 'auto', display: 'flex', flexDirection: 'column', boxSizing: 'border-box' }}>
+                <_s.TableContainer>
                     <RequestTable
                         requests={requests}
+                        selectedItemIds={selectedItemIds}
+                        onSelectItem={handleSelectItem}
+                        onDeselectItem={handleDeselectItem}
                         onTogglePurchased={handleTogglePurchased}
-                        onEdit={handleEdit}
-                        onDelete={handleDeleteRequest}
                         loading={loading}
                     />
-                    <Box gap={1} sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                </_s.TableContainer>
+                <_s.Controls>
+                    <Box gap={1} sx={{ padding: '12px', backgroundColor: 'white', borderTop: '1px solid #d9d9d9', boxSizing: 'border-box', maxWidth: '600px', display: 'flex', flexDirection: 'row', width: '100%' }}>
                         <Button sx={{ flexGrow: 1 }} startDecorator={<AddIcon/>} onClick={() => setAddModalOpen(true)}>
                             Add Item
                         </Button>
-                        <IconButton variant="solid" sx={{ backgroundColor: "purple" }}>
+                        <IconButton
+                            onClick={() => handleEdit()}
+                            disabled={!editEnabled}
+                            variant="solid"
+                            sx={{ backgroundColor: "purple" }}>
                             <EditSharpIcon />
                         </IconButton>
-                        <IconButton variant="solid" color="danger">
+                        <IconButton
+                            onClick={() => handleDelete()}
+                            disabled={!deleteEnabled}
+                            variant="solid"
+                            color="danger">
                             <DeleteIcon />
                         </IconButton>
                     </Box>
-                </Box>
-
+                </_s.Controls>
             </_s.Container>
         </>
     )
