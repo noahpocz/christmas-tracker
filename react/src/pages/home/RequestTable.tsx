@@ -9,12 +9,16 @@ import { TableRow } from './TableRow.tsx'
 import type { GiftRequest } from '../../services/giftRequestApi';
 
 const COLUMN_WIDTHS = [
-    8, 25, 55, 12
+    8, 22, 58, 12
 ]
 
 const _s = {
     Table: styled(Box)`
         width: 100%;
+        border: 1px solid #d9d9d9;
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     `,
 
     Row: styled.div`
